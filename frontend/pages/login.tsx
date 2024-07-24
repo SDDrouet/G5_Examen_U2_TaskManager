@@ -8,8 +8,10 @@ const LoginPage: React.FC = () => {
     const router = useRouter(); // Inicializa useRouter
 
     const handleLogin = async (email: string, password: string) => {
-        const user = await login(email, password);
-        if (user) {
+        const { user, token } = await login(email, password);
+        if (user && token) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
             router.push('/task'); // Redirige al usuario a /tabla en caso de éxito
         } else {
             console.log('Login failed');
@@ -17,7 +19,6 @@ const LoginPage: React.FC = () => {
             if (incorrectCredential) {
                 incorrectCredential.textContent = 'Credenciales incorrectas';
             }
-            // Aquí podrías mostrar un mensaje de error en el componente LoginView si quieres
         }
     };
 

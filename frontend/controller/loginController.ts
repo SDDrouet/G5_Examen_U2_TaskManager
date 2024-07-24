@@ -3,7 +3,7 @@ import User from '../models/user';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const login = async (email: string, password: string): Promise<User | null> => {
+export const login = async (email: string, password: string): Promise<{ user: User | null; token: string | null }> => {
     try {
         const response = await fetch(`${API_URL}/users/login`, {
             method: 'POST',
@@ -14,12 +14,18 @@ export const login = async (email: string, password: string): Promise<User | nul
         });
 
         if (response.ok) {
-            const user: User | null = await response.json();
-            return user;
+            const data = await response.json();
+            return { user: data.user, token: data.token };
         } else {
-            return null;
+            return { user: null, token: null };
         }
     } catch (error) {
-        return null;
+        console.error('Login error:', error);
+        return { user: null, token: null };
     }
+};
+
+export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 };

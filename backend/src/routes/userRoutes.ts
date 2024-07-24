@@ -1,5 +1,7 @@
 import express from 'express';
 import * as userService from '../services/userService';
+var jwt = require('jsonwebtoken');
+
 
 const router = express.Router();
 
@@ -49,7 +51,22 @@ router.post('/login', async (req, res) => {
     try {
         const user = await userService.loginUser(email, password);
         if (user) {
-            res.json(user);
+            // Genera un token JWT
+            const token = jwt.sign(
+                { userId: user.id, email: user.email },
+                process.env.JWT_SECRET || 'Prueba@123',
+                { expiresIn: '1h' } // El token expira en 1 hora
+            );
+            
+            // Devuelve el usuario y el token
+            res.json({
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name
+                },
+                token
+            });
         } else {
             res.status(401).json({ message: 'Email or password is incorrect' });
         }
