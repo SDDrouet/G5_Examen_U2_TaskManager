@@ -4,9 +4,11 @@ export interface Task {
     nombre: string;
     descripcion: string;
     fechaLimite: string;
+    realizado: boolean; // Asegúrate de que esta línea esté presente
 }
 
-export interface Group {
+
+export interface List {
     id: number;
     nombre: string;
     tareas: Task[];
