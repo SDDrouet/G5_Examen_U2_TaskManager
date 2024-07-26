@@ -30,7 +30,60 @@
             "realizado": false
           }
         ]
+      },
+      {
+        "nombre": "nueva lista",
+        "tareas": [],
+        "id": 102
       }
     ]
+  },
+  {
+    "id": 2,
+    "name": "David",
+    "email": "david@gmail.com",
+    "password": "$2b$10$KPwNnXINFprxiLurndvBWuspaLhf3FvYD5rPcCsft77mLpwQnj5nu",
+    "lists": [
+      {
+        "nombre": "nueva lista",
+        "tareas": [],
+        "id": 1
+      },
+      {
+        "nombre": "nueva lista",
+        "tareas": [
+          {
+            "nombre": "New Task",
+            "descripcion": "Description for new task",
+            "fechaLimite": "2024-09-25",
+            "realizado": false
+          },
+          {
+            "nombre": "New Task",
+            "descripcion": "Description for new task",
+            "fechaLimite": "2024-09-25",
+            "realizado": false
+          }
+        ],
+        "id": 2
+      },
+      {
+        "nombre": "nueva lista",
+        "tareas": [],
+        "id": 3
+      },
+      {
+        "nombre": "nueva lista",
+        "tareas": [],
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "chico",
+    "email": "chico@gmail.com",
+    "password": "$2b$10$VGtUqlxzTZklNCile.PyROB0SOVRTCJ22hQGVjCwQLGjxHQ2HosTe",
+    "lists": []
   }
 ]

@@ -24,8 +24,12 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const newUser = await userService.createUser(req.body);
-        res.status(201).json(newUser);
+        const newUserSuccess = await userService.createUser(req.body);        
+        if (newUserSuccess) {
+            res.status(201).json({ message: 'Registro OK' });
+        } else {
+            res.status(402).json({ message: 'El Usuario ya existe' });
+        }
     } catch (error: any) {
         res.status(400).json({ message: error.message });
     }
@@ -86,10 +90,10 @@ router.get('/:id/tasks', async (req, res) => {
 });
 
 // Agregar una nueva tarea a un usuario
-router.post('/:id/tasks', async (req, res) => {
+router.post('/:id/:idList/tasks', async (req, res) => {
     try {
         const newTask: Task = req.body;
-        const user = await userService.addTask(parseInt(req.params.id), newTask);
+        const user = await userService.addTaskToList(parseInt(req.params.id), parseInt(req.params.idList), newTask);
         if (user) {
             res.status(201).json(user);
         } else {

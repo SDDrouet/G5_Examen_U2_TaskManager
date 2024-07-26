@@ -29,10 +29,12 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
     return users.find(u => u.email === email);
 }
 
-export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
+export async function createUser(userData: Omit<User, 'id'>): Promise<boolean> {
+    console.log("Creando usuario");
     const existingUser = await getUserByEmail(userData.email);
+
     if (existingUser) {
-        throw new Error('User already exists');
+        return false;
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -45,7 +47,7 @@ export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
     };
     users.push(newUser);
     await writeUsers(users);
-    return newUser;
+    return true;
 }
 
 export async function updateUser(id: number, userData: Partial<User>): Promise<User | null> {
@@ -213,6 +215,7 @@ export async function addTaskToList(userId: number, listId: number, task: Task):
         const user = users[userIndex];
         const list = user.lists.find(list => list.id === listId);
         if (list) {
+            task.id = list.tareas.length > 0 ? Math.max(...list.tareas.map(l => l.id)) + 1 : 1;
             list.tareas.push(task);
             await writeUsers(users);
             return user;
