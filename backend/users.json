@@ -3,6 +3,34 @@
     "id": 1,
     "email": "stephen@gmail.com",
     "name": "Stephen Drouet",
-    "password": "$2b$10$NHpW3QkSAihpW5JFAJUyCOip8Bf.dmXYqc.G5TSqw/deCQeNgc9Yu"
+    "password": "$2b$10$NHpW3QkSAihpW5JFAJUyCOip8Bf.dmXYqc.G5TSqw/deCQeNgc9Yu",
+    "lists": [
+      {
+        "id": 101,
+        "nombre": "Updated Daily Tasks 2",
+        "tareas": [
+          {
+            "id": 1001,
+            "nombre": "Task 1",
+            "descripcion": "Description 1",
+            "fechaLimite": "2024-07-25",
+            "realizado": false
+          },
+          {
+            "id": 1002,
+            "nombre": "Task 2",
+            "descripcion": "Description 2",
+            "fechaLimite": "2024-08-25",
+            "realizado": true
+          },
+          {
+            "nombre": "New Task",
+            "descripcion": "Description for new task",
+            "fechaLimite": "2024-09-25",
+            "realizado": false
+          }
+        ]
+      }
+    ]
   }
 ]
