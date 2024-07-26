@@ -1,19 +1,25 @@
 // views/registerView.tsx
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { register } from '../controller/registerController'; // Asegúrate de que el nombre del directorio sea correcto
+import { useRouter } from 'next/router';
 
-interface RegisterViewProps {
-    onRegister: (name: string, email: string, password: string) => void;
-}
-
-const RegisterView: React.FC<RegisterViewProps> = ({ onRegister }) => {
+const RegisterView: React.FC = () => {
+    const router = useRouter();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onRegister(name, email, password);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+        const result = await register(name, email, password);
+
+        if (result.success) {
+            alert('Usuario registrado con éxito');
+            router.push('/login');
+        } else {
+            alert(result.message);
+        }
     };
 
     return (
@@ -25,7 +31,6 @@ const RegisterView: React.FC<RegisterViewProps> = ({ onRegister }) => {
                     </div>
                 </Link>
             </div>
-
 
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold">Register</h2>
@@ -63,7 +68,9 @@ const RegisterView: React.FC<RegisterViewProps> = ({ onRegister }) => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                     </div>
-                    <button type="submit" className="w-full px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">Register</button>
+                    <button type="submit" className="w-full px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
+                        Register
+                    </button>
                 </form>
             </div>
         </div>
