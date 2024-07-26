@@ -91,35 +91,30 @@ export async function getTasks(userId: number): Promise<Task[]> {
 }
 
 // Función para agregar una tarea a un usuario
-export async function addTask(userId: number, task: Task): Promise<User | null> {
+export async function addTaskToList(userId: number, listId: number, task: Task): Promise<User | null> {
     const users = await readUsers();
     const userIndex = users.findIndex(u => u.id === userId);
     if (userIndex !== -1) {
         const user = users[userIndex];
-        // Asumiendo que cada usuario tiene solo una lista por ahora
-        if (user.lists.length > 0) {
-            user.lists[0].tareas.push(task);
-        } else {
-            // Si no hay listas, se crea una nueva lista
-            user.lists.push({
-                id: user.lists.length + 1,
-                nombre: "Default List",
-                tareas: [task]
-            });
+        const list = user.lists.find(list => list.id === listId);
+        if (list) {
+            task.id = list.tareas.length > 0 ? Math.max(...list.tareas.map(l => l.id)) + 1 : 1;
+            task.realizado = false
+            list.tareas.push(task);
+            await writeUsers(users);
+            return user;
         }
-        await writeUsers(users);
-        return user;
     }
     return null;
 }
 
 // Función para actualizar una tarea de un usuario
-export async function updateTask(userId: number, taskId: number, updatedTask: Partial<Task>): Promise<User | null> {
+export async function updateTask(userId: number, listId: number, taskId: number, updatedTask: Partial<Task>): Promise<User | null> {
     const users = await readUsers();
     const userIndex = users.findIndex(u => u.id === userId);
     if (userIndex !== -1) {
         const user = users[userIndex];
-        const list = user.lists.find(list => list.tareas.some(task => task.id === taskId));
+        const list = user.lists.find(list => list.id === listId);
         if (list) {
             const taskIndex = list.tareas.findIndex(task => task.id === taskId);
             if (taskIndex !== -1) {
@@ -132,13 +127,32 @@ export async function updateTask(userId: number, taskId: number, updatedTask: Pa
     return null;
 }
 
-// Función para eliminar una tarea de un usuario
-export async function deleteTask(userId: number, taskId: number): Promise<User | null> {
+// Función para actualizar una tarea de un usuario
+export async function toggleTaskStatus(userId: number, listId: number, taskId: number): Promise<User | null> {
     const users = await readUsers();
     const userIndex = users.findIndex(u => u.id === userId);
     if (userIndex !== -1) {
         const user = users[userIndex];
-        const list = user.lists.find(list => list.tareas.some(task => task.id === taskId));
+        const list = user.lists.find(list => list.id === listId);
+        if (list) {
+            const taskIndex = list.tareas.findIndex(task => task.id === taskId);
+            if (taskIndex !== -1) {
+                list.tareas[taskIndex].realizado = !list.tareas[taskIndex].realizado;
+                await writeUsers(users);
+                return user;
+            }
+        }
+    }
+    return null;
+}
+
+// Función para eliminar una tarea de un usuario
+export async function deleteTask(userId: number, listId: number, taskId: number): Promise<User | null> {
+    const users = await readUsers();
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex !== -1) {
+        const user = users[userIndex];
+        const list = user.lists.find(list => list.id === listId);
         if (list) {
             list.tareas = list.tareas.filter(task => task.id !== taskId);
             await writeUsers(users);
@@ -208,18 +222,4 @@ export async function deleteList(userId: number, listId: number): Promise<User |
     }
     return null;
 }
-export async function addTaskToList(userId: number, listId: number, task: Task): Promise<User | null> {
-    const users = await readUsers();
-    const userIndex = users.findIndex(u => u.id === userId);
-    if (userIndex !== -1) {
-        const user = users[userIndex];
-        const list = user.lists.find(list => list.id === listId);
-        if (list) {
-            task.id = list.tareas.length > 0 ? Math.max(...list.tareas.map(l => l.id)) + 1 : 1;
-            list.tareas.push(task);
-            await writeUsers(users);
-            return user;
-        }
-    }
-    return null;
-}
+

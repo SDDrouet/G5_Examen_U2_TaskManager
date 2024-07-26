@@ -5,82 +5,124 @@ let lists: List[] = [];
 let nextListId = 1;
 let nextTaskId = 1;
 
-export const getLists = (): List[] => {
-    return lists;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
+export const getLists = async(): Promise<List[] | null> => {    
+    try {
+        const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+        const response = await fetch(`${API_URL}/users/${userId}/lists`);
+        lists = await response.json();
+        return lists;
+    } catch (error) {
+        return null;
+    }
 };
 
 export const getListById = (id: number): List | undefined => {
     return lists.find(list => list.id === id);
 };
 
-export const addList = (nombre: string): List => {
-    console.log("addList");
-    const newList: List = { id: nextListId++, nombre, tareas: [] };
-    lists.push(newList);
-    return newList;
-};
-
-export const updateList = (id: number, nombre: string): List | null => {
-    const list = lists.find(l => l.id === id);
-    if (list) {
-        list.nombre = nombre;
-        return list;
+export const addList = async (nombre: string): Promise<List> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre, "tareas": [] }),
+    });
+    if (!response.ok) {
+        throw new Error('Error adding list');
     }
-    return null;
+    return response.json();
 };
 
-export const deleteList = (id: number): boolean => {
-    const index = lists.findIndex(l => l.id === id);
-    if (index !== -1) {
-        lists.splice(index, 1);
-        return true;
+export const updateList = async (listId: number, nombre: string): Promise<List> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre }),
+    });
+    if (!response.ok) {
+        throw new Error('Error updating list');
     }
-    return false;
+    return response.json();
 };
 
-export const addTask = (listId: number, nombre: string, descripcion: string, fechaLimite: string): Task | null => {
-    console.log("addTask");
-    const list = lists.find(l => l.id === listId);
-    if (list) {
-        const newTask: Task = { id: nextTaskId++, nombre, descripcion, fechaLimite, realizado: false };
-        list.tareas.push(newTask);
-        return newTask;
+export const deleteList = async (listId: number): Promise<boolean> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        return false;
     }
-    return null;
+    return true;
 };
 
-export const updateTask = (listId: number, taskId: number, updates: Partial<Task>): Task | null => {
-    const list = lists.find(l => l.id === listId);
-    if (list) {
-        const task = list.tareas.find(t => t.id === taskId);
-        if (task) {
-            Object.assign(task, updates);
-            return task;
+export const addTask = async (listId: number, nombre: string, descripcion: string, fechaLimite: string): Promise<Task> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}/tasks`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre, descripcion, fechaLimite }),
+    });
+    if (!response.ok) {
+        throw new Error('Error adding task');
+    }
+    return response.json();
+};
+
+
+export const updateTask = async (listId: number, taskId: number, updates: Partial<Task>): Promise<Task> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+    });
+    if (!response.ok) {
+        throw new Error('Error updating task');
+    }
+    return response.json();
+};
+
+
+export const toggleTaskStatus = async (listId: number, taskId: number): Promise<Task | null> => {
+    try {
+        const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+        const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}/tasks/${taskId}/toggle`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error updating task');
         }
+        return response.json();
+    } catch (error) {
+        console.error(error);
+        return null;
     }
-    return null;
 };
 
-export const deleteTask = (listId: number, taskId: number): boolean => {
-    const list = lists.find(l => l.id === listId);
-    if (list) {
-        const index = list.tareas.findIndex(t => t.id === taskId);
-        if (index !== -1) {
-            list.tareas.splice(index, 1);
-            return true;
-        }
-    }
-    return false;
-};
 
-export const toggleTaskStatus = (listId: number, taskId: number): Task | null => {
-    const list = lists.find(l => l.id === listId);
-    if (list) {
-        const task = list.tareas.find(t => t.id === taskId);
-        if (task) {
-            task.realizado = !task.realizado;
-            return task;
-        }
+export const deleteTask = async (listId: number, taskId: number): Promise<boolean> => {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const response = await fetch(`${API_URL}/users/${userId}/lists/${listId}/tasks/${taskId}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        return false;
     }
-    return null;
+    return true;
 };

@@ -8,11 +8,14 @@ var jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+// Funciones para usuarios
+//Obtener todos los usuarios
 router.get('/', async (req, res) => {
     const users = await userService.readUsers();
     res.json(users);
 });
 
+//Obtener un usuario por su id
 router.get('/:id', async (req, res) => {
     const user = await userService.getUserById(parseInt(req.params.id));
     if (user) {
@@ -22,6 +25,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+//Crear un nuevo usuario
 router.post('/', async (req, res) => {
     try {
         const newUserSuccess = await userService.createUser(req.body);        
@@ -35,6 +39,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+//Actualizar un usuario
 router.put('/:id', async (req, res) => {
     const updatedUser = await userService.updateUser(parseInt(req.params.id), req.body);
     if (updatedUser) {
@@ -44,6 +49,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+//Eliminar un usuario
 router.delete('/:id', async (req, res) => {
     const deleted = await userService.deleteUser(parseInt(req.params.id));
     if (deleted) {
@@ -53,6 +59,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+//Login de usuario
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -81,54 +88,10 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-// routes/userRoutes.ts
 
-// Obtener todas las tareas de un usuario
-router.get('/:id/tasks', async (req, res) => {
-    const tasks = await userService.getTasks(parseInt(req.params.id));
-    res.json(tasks);
-});
 
-// Agregar una nueva tarea a un usuario
-router.post('/:id/:idList/tasks', async (req, res) => {
-    try {
-        const newTask: Task = req.body;
-        const user = await userService.addTaskToList(parseInt(req.params.id), parseInt(req.params.idList), newTask);
-        if (user) {
-            res.status(201).json(user);
-        } else {
-            res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-    } catch (error: any) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-// Actualizar una tarea de un usuario
-router.put('/:id/tasks/:taskId', async (req, res) => {
-    try {
-        const updatedTask: Partial<Task> = req.body;
-        const user = await userService.updateTask(parseInt(req.params.id), parseInt(req.params.taskId), updatedTask);
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404).json({ message: 'Usuario o tarea no encontrado' });
-        }
-    } catch (error: any) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-// Eliminar una tarea de un usuario
-router.delete('/:id/tasks/:taskId', async (req, res) => {
-    const user = await userService.deleteTask(parseInt(req.params.id), parseInt(req.params.taskId));
-    if (user) {
-        res.json(user);
-    } else {
-        res.status(404).json({ message: 'Usuario o tarea no encontrado' });
-    }
-});
-
+// Funciones para listas
+//Obtener las listas de un usuario
 router.get('/:userId/lists', async (req, res) => {
     try {
         const lists = await userService.getLists(parseInt(req.params.userId));
@@ -138,6 +101,7 @@ router.get('/:userId/lists', async (req, res) => {
     }
 });
 
+//Obtener una lista por su id
 router.get('/:userId/lists/:listId', async (req, res) => {
     try {
         const list = await userService.getListById(parseInt(req.params.userId), parseInt(req.params.listId));
@@ -151,6 +115,7 @@ router.get('/:userId/lists/:listId', async (req, res) => {
     }
 });
 
+//Agregar una nueva lista a un usuario
 router.post('/:userId/lists', async (req, res) => {
     try {
         const newList: List = req.body;
@@ -165,6 +130,7 @@ router.post('/:userId/lists', async (req, res) => {
     }
 });
 
+//Actualizar una lista de un usuario
 router.put('/:userId/lists/:listId', async (req, res) => {
     try {
         const updatedList: Partial<List> = req.body;
@@ -180,6 +146,7 @@ router.put('/:userId/lists/:listId', async (req, res) => {
     }
 });
 
+//Eliminar una lista de un usuario
 router.delete('/:userId/lists/:listId', async (req, res) => {
     try {
         const updatedUser = await userService.deleteList(parseInt(req.params.userId), parseInt(req.params.listId));
@@ -193,22 +160,17 @@ router.delete('/:userId/lists/:listId', async (req, res) => {
     }
 });
 
-// Rutas para tareas dentro de listas
-router.get('/:userId/tasks', async (req, res) => {
-    try {
-        const tasks = await userService.getTasks(parseInt(req.params.userId));
-        res.json(tasks);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-});
 
-router.post('/:userId/tasks', async (req, res) => {
+//Funciones para tareas
+//Agregar una nueva tarea a una lista
+router.post('/:userId/lists/:listId/tasks', async (req, res) => {
     try {
         const newTask: Task = req.body;
-        const updatedUser = await userService.addTask(parseInt(req.params.userId), newTask);
+        const listId = parseInt(req.params.listId);        
+        const updatedUser = await userService.addTaskToList(parseInt(req.params.userId), listId, newTask);
+        const listIndex: number = updatedUser?.lists.findIndex(list => list.id === listId) ?? -1;
         if (updatedUser) {
-            const addedTask = updatedUser.lists[0].tareas[updatedUser.lists[0].tareas.length - 1];
+            const addedTask = updatedUser.lists[listIndex].tareas[updatedUser.lists[listIndex].tareas.length - 1];
             res.status(201).json(addedTask);
         } else {
             res.status(404).json({ message: 'Usuario no encontrado' });
@@ -218,10 +180,12 @@ router.post('/:userId/tasks', async (req, res) => {
     }
 });
 
-router.put('/:userId/tasks/:taskId', async (req, res) => {
+//Actualizar una tarea de una lista
+router.put('/:userId/lists/:listId/tasks/:taskId', async (req, res) => {
     try {
         const updatedTask: Partial<Task> = req.body;
-        const updatedUser = await userService.updateTask(parseInt(req.params.userId), parseInt(req.params.taskId), updatedTask);
+        const listId = parseInt(req.params.listId);   
+        const updatedUser = await userService.updateTask(parseInt(req.params.userId), listId, parseInt(req.params.taskId), updatedTask);
         if (updatedUser) {
             const updatedTaskInUser = updatedUser.lists.flatMap(list => list.tareas).find(task => task.id === parseInt(req.params.taskId));
             res.json(updatedTaskInUser);
@@ -233,9 +197,26 @@ router.put('/:userId/tasks/:taskId', async (req, res) => {
     }
 });
 
-router.delete('/:userId/tasks/:taskId', async (req, res) => {
+//Actualizar una tarea de una lista
+router.put('/:userId/lists/:listId/tasks/:taskId/toggle', async (req, res) => {
     try {
-        const updatedUser = await userService.deleteTask(parseInt(req.params.userId), parseInt(req.params.taskId));
+        const listId = parseInt(req.params.listId);   
+        const updatedUser = await userService.toggleTaskStatus(parseInt(req.params.userId), listId, parseInt(req.params.taskId));
+        if (updatedUser) {
+            const updatedTaskInUser = updatedUser.lists.flatMap(list => list.tareas).find(task => task.id === parseInt(req.params.taskId));
+            res.json(updatedTaskInUser);
+        } else {
+            res.status(404).json({ message: 'Usuario o tarea no encontrada' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+//Eliminar una tarea de una lista
+router.delete('/:userId/lists/:listId/tasks/:taskId', async (req, res) => {
+    try {
+        const updatedUser = await userService.deleteTask(parseInt(req.params.userId), parseInt(req.params.listId), parseInt(req.params.taskId));
         if (updatedUser) {
             res.json({ message: 'Tarea eliminada' });
         } else {

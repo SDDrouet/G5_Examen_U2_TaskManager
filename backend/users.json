@@ -7,7 +7,7 @@
     "lists": [
       {
         "id": 101,
-        "nombre": "Updated Daily Tasks 2",
+        "nombre": "lista1",
         "tareas": [
           {
             "id": 1001,
@@ -18,23 +18,34 @@
           },
           {
             "id": 1002,
-            "nombre": "Task 2",
-            "descripcion": "Description 2",
-            "fechaLimite": "2024-08-25",
+            "nombre": "Task 2 updated",
+            "descripcion": "Description 2 updated",
+            "fechaLimite": "2024-03-24",
             "realizado": true
           },
           {
-            "nombre": "New Task",
-            "descripcion": "Description for new task",
-            "fechaLimite": "2024-09-25",
+            "id": 1003,
+            "nombre": "Old Task",
+            "descripcion": "Description old",
+            "fechaLimite": "2025-05-22",
             "realizado": false
           }
         ]
       },
       {
-        "nombre": "nueva lista",
+        "nombre": "lista2",
         "tareas": [],
         "id": 102
+      },
+      {
+        "nombre": "lista3",
+        "tareas": [],
+        "id": 103
+      },
+      {
+        "nombre": "lista4",
+        "tareas": [],
+        "id": 104
       }
     ]
   },
@@ -84,6 +95,54 @@
     "name": "chico",
     "email": "chico@gmail.com",
     "password": "$2b$10$VGtUqlxzTZklNCile.PyROB0SOVRTCJ22hQGVjCwQLGjxHQ2HosTe",
+    "lists": [
+      {
+        "nombre": "13",
+        "tareas": [
+          {
+            "nombre": "s2e",
+            "descripcion": "312",
+            "fechaLimite": "",
+            "id": 1,
+            "realizado": true
+          },
+          {
+            "nombre": "2312d",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 5,
+            "realizado": true
+          },
+          {
+            "nombre": "fdsf",
+            "descripcion": "sadasd",
+            "fechaLimite": "",
+            "id": 6,
+            "realizado": true
+          }
+        ],
+        "id": 1
+      },
+      {
+        "nombre": "vdfvdfs",
+        "tareas": [
+          {
+            "nombre": "s2e",
+            "descripcion": "312",
+            "fechaLimite": "fvdf",
+            "id": 1,
+            "realizado": true
+          }
+        ],
+        "id": 2
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "bubu",
+    "email": "bubu@gmail.com",
+    "password": "$2b$10$tY8w4Zs5dILeks95AC/4jO7l9xXXhf7XXzANEYm6HQto2O8EAf2wm",
     "lists": []
   }
 ]
