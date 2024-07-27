@@ -10,6 +10,7 @@ import withAuth from '../controller/withAuth';
 const Home = () => {
 
     const [lists, setLists] = useState<List[]>([]);
+    
 
     useEffect(() => {
         const fetchLists = async () => {

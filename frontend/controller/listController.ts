@@ -2,11 +2,14 @@
 import { List, Task } from '../models/taskModel';
 
 let lists: List[] = [];
-let nextListId = 1;
-let nextTaskId = 1;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export const getUserName = async(): Promise<string> => {
+    const userName: string = JSON.parse(localStorage.getItem('user') || '{}').nombre;
+    console.log("usuario:" + userName);
+    return userName;
+}
 
 export const getLists = async(): Promise<List[] | null> => {    
     try {

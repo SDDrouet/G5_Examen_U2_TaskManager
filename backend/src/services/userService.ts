@@ -50,28 +50,6 @@ export async function createUser(userData: Omit<User, 'id'>): Promise<boolean> {
     return true;
 }
 
-export async function updateUser(id: number, userData: Partial<User>): Promise<User | null> {
-    const users = await readUsers();
-    const index = users.findIndex(u => u.id === id);
-    if (index !== -1) {
-        users[index] = { ...users[index], ...userData };
-        await writeUsers(users);
-        return users[index];
-    }
-    return null;
-}
-
-export async function deleteUser(id: number): Promise<boolean> {
-    let users = await readUsers();
-    const initialLength = users.length;
-    users = users.filter(u => u.id !== id);
-    if (users.length < initialLength) {
-        await writeUsers(users);
-        return true;
-    }
-    return false;
-}
-
 // Función para el login
 export async function loginUser(email: string, password: string): Promise<User | null> {
     const user = await getUserByEmail(email);
@@ -79,15 +57,6 @@ export async function loginUser(email: string, password: string): Promise<User |
         return user;
     }
     return null;
-}
-
-// Función para obtener todas las tareas de un usuario
-export async function getTasks(userId: number): Promise<Task[]> {
-    const user = await getUserById(userId);
-    if (user) {
-        return user.lists.flatMap(list => list.tareas);
-    }
-    return [];
 }
 
 // Función para agregar una tarea a un usuario
@@ -169,15 +138,6 @@ export async function getLists(userId: number): Promise<List[]> {
         return user.lists;
     }
     return [];
-}
-
-// Función para obtener una lista específica de un usuario
-export async function getListById(userId: number, listId: number): Promise<List | null> {
-    const user = await getUserById(userId);
-    if (user) {
-        return user.lists.find(list => list.id === listId) || null;
-    }
-    return null;
 }
 
 // Función para agregar una lista a un usuario

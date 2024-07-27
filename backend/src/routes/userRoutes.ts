@@ -15,16 +15,6 @@ router.get('/', async (req, res) => {
     res.json(users);
 });
 
-//Obtener un usuario por su id
-router.get('/:id', async (req, res) => {
-    const user = await userService.getUserById(parseInt(req.params.id));
-    if (user) {
-        res.json(user);
-    } else {
-        res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-});
-
 //Crear un nuevo usuario
 router.post('/', async (req, res) => {
     try {
@@ -36,26 +26,6 @@ router.post('/', async (req, res) => {
         }
     } catch (error: any) {
         res.status(400).json({ message: error.message });
-    }
-});
-
-//Actualizar un usuario
-router.put('/:id', async (req, res) => {
-    const updatedUser = await userService.updateUser(parseInt(req.params.id), req.body);
-    if (updatedUser) {
-        res.json(updatedUser);
-    } else {
-        res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-});
-
-//Eliminar un usuario
-router.delete('/:id', async (req, res) => {
-    const deleted = await userService.deleteUser(parseInt(req.params.id));
-    if (deleted) {
-        res.json({ message: 'Usuario eliminado' });
-    } else {
-        res.status(404).json({ message: 'Usuario no encontrado' });
     }
 });
 
@@ -96,20 +66,6 @@ router.get('/:userId/lists', async (req, res) => {
     try {
         const lists = await userService.getLists(parseInt(req.params.userId));
         res.json(lists);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-//Obtener una lista por su id
-router.get('/:userId/lists/:listId', async (req, res) => {
-    try {
-        const list = await userService.getListById(parseInt(req.params.userId), parseInt(req.params.listId));
-        if (list) {
-            res.json(list);
-        } else {
-            res.status(404).json({ message: 'Lista no encontrada' });
-        }
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -197,7 +153,7 @@ router.put('/:userId/lists/:listId/tasks/:taskId', async (req, res) => {
     }
 });
 
-//Actualizar una tarea de una lista
+//Actualizar una tarea de una lista, para cambiar su estado
 router.put('/:userId/lists/:listId/tasks/:taskId/toggle', async (req, res) => {
     try {
         const listId = parseInt(req.params.listId);   

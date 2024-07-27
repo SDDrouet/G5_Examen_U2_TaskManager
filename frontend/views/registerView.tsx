@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { register } from '../controller/registerController'; // Asegúrate de que el nombre del directorio sea correcto
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const RegisterView: React.FC = () => {
     const router = useRouter();
@@ -24,6 +25,14 @@ const RegisterView: React.FC = () => {
 
     return (
         <div className='w-full flex flex-col items-center justify-center'>
+            <div className="absolute top-4 right-4">
+                <Image
+                    src="/Logo2.png" // Ruta del logo en la carpeta public
+                    alt="Logo"
+                    width={100} // Ajusta el tamaño del logo según tus necesidades
+                    height={100}
+                />
+            </div>
             <div className='absolute top-4 left-4'>
                 <Link href="/">
                     <div className="inline-block px-4 py-2 text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
@@ -33,10 +42,10 @@ const RegisterView: React.FC = () => {
             </div>
 
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-                <h2 className="text-2xl font-bold">Register</h2>
+                <h2 className="text-2xl font-bold">¡Registrate ahora!</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre:</label>
                         <input
                             type="text"
                             id="name"
@@ -58,7 +67,7 @@ const RegisterView: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña:</label>
                         <input
                             type="password"
                             id="password"
@@ -68,8 +77,8 @@ const RegisterView: React.FC = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                     </div>
-                    <button type="submit" className="w-full px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-                        Register
+                    <button type="submit" className="w-full px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 font-bold">
+                        Registrar
                     </button>
                 </form>
             </div>

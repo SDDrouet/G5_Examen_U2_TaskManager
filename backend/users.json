@@ -14,38 +14,96 @@
             "nombre": "Task 1",
             "descripcion": "Description 1",
             "fechaLimite": "2024-07-25",
-            "realizado": false
+            "realizado": true
           },
           {
             "id": 1002,
             "nombre": "Task 2 updated",
             "descripcion": "Description 2 updated",
             "fechaLimite": "2024-03-24",
+            "realizado": false
+          },
+          {
+            "nombre": "vdfs",
+            "descripcion": "gdfgdfg",
+            "fechaLimite": "2025-15-59",
+            "id": 1004,
+            "realizado": false
+          },
+          {
+            "nombre": "das",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 1005,
             "realizado": true
           },
           {
-            "id": 1003,
-            "nombre": "Old Task",
-            "descripcion": "Description old",
-            "fechaLimite": "2025-05-22",
-            "realizado": false
+            "nombre": "hfgh",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 1006,
+            "realizado": true
+          },
+          {
+            "nombre": "nueva",
+            "descripcion": "232",
+            "fechaLimite": "2024-07-11",
+            "id": 1007,
+            "realizado": true
+          },
+          {
+            "nombre": "fgdfg",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 1008,
+            "realizado": true
+          },
+          {
+            "nombre": "gdfgdfg",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 1009,
+            "realizado": true
+          },
+          {
+            "nombre": "1",
+            "descripcion": "",
+            "fechaLimite": "",
+            "id": 1010,
+            "realizado": true
           }
         ]
       },
       {
         "nombre": "lista2",
-        "tareas": [],
+        "tareas": [
+          {
+            "nombre": "nueva tarea115 55",
+            "descripcion": "232",
+            "fechaLimite": "2024-07-27",
+            "id": 1,
+            "realizado": true
+          }
+        ],
         "id": 102
-      },
-      {
-        "nombre": "lista3",
-        "tareas": [],
-        "id": 103
       },
       {
         "nombre": "lista4",
         "tareas": [],
         "id": 104
+      },
+      {
+        "nombre": "lista xd",
+        "tareas": [
+          {
+            "nombre": "cdfds",
+            "descripcion": "23123",
+            "fechaLimite": "2024-07-12",
+            "id": 1,
+            "realizado": false
+          }
+        ],
+        "id": 105
       }
     ]
   },
@@ -118,7 +176,7 @@
             "descripcion": "sadasd",
             "fechaLimite": "",
             "id": 6,
-            "realizado": true
+            "realizado": false
           }
         ],
         "id": 1
@@ -131,7 +189,7 @@
             "descripcion": "312",
             "fechaLimite": "fvdf",
             "id": 1,
-            "realizado": true
+            "realizado": false
           }
         ],
         "id": 2
